@@ -2,8 +2,6 @@ use actix_web::{HttpResponse, web, Responder, Error as ActixError};
 
 use serde_derive::Deserialize;
 
-use crate::DbPool;
-
 use serde::Serialize;
 
 use actix_web::Error;
@@ -23,7 +21,6 @@ pub struct ChatMessage {
 }
 
 pub async fn chat(
-    _pool: web::Data<DbPool>,
     msg: web::Json<ChatData>,  // change ChatMessage to ChatData
 ) -> Result<HttpResponse, ActixError> {
     println!("In Chat with message: {:?}", msg);

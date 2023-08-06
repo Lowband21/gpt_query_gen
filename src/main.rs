@@ -5,16 +5,9 @@ use std::env;
 use dotenv::dotenv;
 use actix_web::middleware::Logger;
 
-mod models;
 mod routes;
-mod db;
 
 use crate::routes::*;
-
-#[macro_use]
-extern crate lazy_static;
-
-type DbPool = Pool<ConnectionManager<PgConnection>>;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -43,7 +36,10 @@ async fn main() -> std::io::Result<()> {
                         } else {
                             match actix_files::NamedFile::open("./client/public/index.html") {
                                 Ok(file) => file.into_response(&req),
-                                Err(_) => HttpResponse::InternalServerError().finish(),
+                                Err(e) => {
+                                    println!("Error opening file: {:?}", e);
+                                    HttpResponse::InternalServerError().finish()
+                                },
                             }
                         }
                     }
